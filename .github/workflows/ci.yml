@@ -1,0 +1,52 @@
+# .github/workflows/ci.yml
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]  # main 브랜치에 push될 때
+  pull_request:
+    branches: [ main ]  # main으로의 PR이 생성/업데이트될 때
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 코드 체크아웃
+      - uses: actions/checkout@v3
+
+      # 2. PNPM 설치
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # 3. Node.js 설치
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      # 4. 의존성 설치
+      - name: Install dependencies
+        run: pnpm install
+
+      # 5. 테스트 실행
+      - name: Run tests
+        run: pnpm test
+
+      # 6. Web 앱 배포
+      - name: Deploy Web App
+        uses: vercel/actions/cli@master
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_WEB_ID }}
+          working-directory: ./apps/web
+
+      # 7. Admin 앱 배포
+      - name: Deploy Admin App
+        uses: vercel/actions/cli@master
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ADMIN_ID }}
+          working-directory: ./apps/admin
