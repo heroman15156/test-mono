@@ -37,10 +37,9 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_WEB_ID }}
         run: |
-          vercel --no-color deploy app/web \
+          vercel deploy \
             --yes \
             --prod \
-            --cwd app/web \
             --token=${{ secrets.VERCEL_TOKEN }} \
             --scope=${{ secrets.VERCEL_ORG_ID }}
 
@@ -51,9 +50,8 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ADMIN_ID }}
         run: |
-          vercel --no-color deploy app/admin \
+          vercel deploy \
             --yes \
             --prod \
-            --cwd app/admin \
             --token=${{ secrets.VERCEL_TOKEN }} \
             --scope=${{ secrets.VERCEL_ORG_ID }}
