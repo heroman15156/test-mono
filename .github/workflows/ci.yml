@@ -28,6 +28,9 @@ jobs:
         run: pnpm test
 
       # Web 앱 배포
+      - name: Install Vercel CLI
+        run: pnpm install -g vercel@latest
+
       - name: Deploy Web App
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -35,8 +38,6 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_WEB_ID }}
         working-directory: app/web
         run: |
-          cd $GITHUB_WORKSPACE/app/web
-          pnpm install -g vercel@latest
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
@@ -49,7 +50,6 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ADMIN_ID }}
         working-directory: app/admin
         run: |
-          cd $GITHUB_WORKSPACE/app/admin
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           vercel build --token=${{ secrets.VERCEL_TOKEN }}
           vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
