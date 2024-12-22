@@ -27,20 +27,20 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      # Web 앱 배포
       - name: Install Vercel CLI
         run: pnpm install -g vercel@latest
 
+      # Web 앱 배포
       - name: Deploy Web App
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_WEB_ID }}
-        working-directory: app/web
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
+          cd app/web
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd .
+          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd .
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod --cwd .
 
       # Admin 앱 배포
       - name: Deploy Admin App
@@ -48,8 +48,8 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ADMIN_ID }}
-        working-directory: app/admin
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel build --token=${{ secrets.VERCEL_TOKEN }}
-          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
+          cd app/admin
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --cwd .
+          vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd .
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod --cwd .
