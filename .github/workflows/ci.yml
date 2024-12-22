@@ -37,11 +37,12 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_WEB_ID }}
         run: |
-          vercel deploy app/web \
+          vercel --no-color deploy app/web \
             --yes \
+            --prod \
+            --cwd app/web \
             --token=${{ secrets.VERCEL_TOKEN }} \
-            --scope=${{ secrets.VERCEL_ORG_ID }} \
-            --prod
+            --scope=${{ secrets.VERCEL_ORG_ID }}
 
       # Admin 앱 배포
       - name: Deploy Admin App
@@ -50,8 +51,9 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ADMIN_ID }}
         run: |
-          vercel deploy app/admin \
+          vercel --no-color deploy app/admin \
             --yes \
+            --prod \
+            --cwd app/admin \
             --token=${{ secrets.VERCEL_TOKEN }} \
-            --scope=${{ secrets.VERCEL_ORG_ID }} \
-            --prod
+            --scope=${{ secrets.VERCEL_ORG_ID }}
